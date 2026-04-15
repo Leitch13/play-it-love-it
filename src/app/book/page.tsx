@@ -2,7 +2,17 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CalendarDays, Clock, MapPin, Star, Users, CheckCircle2 } from "lucide-react";
+import {
+  CalendarDays,
+  Clock,
+  MapPin,
+  Star,
+  Users,
+  CheckCircle2,
+  Shield,
+  Trophy,
+  Zap,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,30 +41,34 @@ const SESSION_TYPES = [
     price: "Free",
     description: "Skills assessment + personalised feedback",
     badge: "Most Popular",
+    icon: Trophy,
   },
   {
     id: "group",
     title: "Group Coaching",
     duration: "60 min",
-    price: "From $15/session",
+    price: "From \u00a315/session",
     description: "Small group sessions (max 8 players)",
     badge: null,
+    icon: Users,
   },
   {
     id: "one_on_one",
     title: "1-on-1 Coaching",
     duration: "45 min",
-    price: "From $40/session",
+    price: "From \u00a340/session",
     description: "Intensive individual development",
     badge: "Premium",
+    icon: Zap,
   },
   {
     id: "holiday_camp",
     title: "Holiday Camp",
     duration: "Full day",
-    price: "From $45/day",
+    price: "From \u00a345/day",
     description: "School holiday training camps",
     badge: null,
+    icon: Star,
   },
 ];
 
@@ -120,54 +134,99 @@ export default function BookingPage() {
   // Success state
   if (submitted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
+      <div className="min-h-screen bg-gradient-to-b from-emerald-950 to-emerald-900 flex items-center justify-center px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           className="text-center max-w-md"
         >
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
-            <CheckCircle2 className="h-8 w-8 text-green-600" />
+          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/20 ring-2 ring-emerald-400">
+            <CheckCircle2 className="h-10 w-10 text-emerald-400" />
           </div>
-          <h1 className="text-2xl font-bold">Booking Confirmed!</h1>
-          <p className="mt-3 text-slate-600">
-            We&apos;ve sent a confirmation email to <strong>{form.parentEmail}</strong> with
-            all the details. We&apos;ll be in touch to confirm the exact time.
+          <h1 className="text-3xl font-bold text-white">You&apos;re Booked In!</h1>
+          <p className="mt-3 text-emerald-200">
+            We&apos;ve sent a confirmation email to <strong className="text-white">{form.parentEmail}</strong> with
+            all the details.
           </p>
-          <div className="mt-6 rounded-2xl bg-white p-5 text-left shadow-sm border">
-            <p className="text-sm text-slate-500">Your booking</p>
-            <p className="font-semibold mt-1">
+          <div className="mt-6 rounded-2xl bg-white/10 backdrop-blur-sm p-5 text-left border border-white/10">
+            <p className="text-sm text-emerald-300">Your booking</p>
+            <p className="font-semibold mt-1 text-white text-lg">
               {SESSION_TYPES.find((s) => s.id === selectedSession)?.title}
             </p>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-sm text-emerald-200 mt-1">
               {form.playerName} &middot; {form.preferredDate} at {form.preferredTime}
             </p>
           </div>
-          <p className="mt-6 text-sm text-slate-500">
-            Remember to bring boots, shin pads, and a water bottle!
-          </p>
+          <div className="mt-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 p-4">
+            <p className="text-sm text-amber-200">
+              <strong>Remember to bring:</strong> boots, shin pads, and a water bottle. Arrive 5 minutes early!
+            </p>
+          </div>
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="border-b bg-white">
-        <div className="mx-auto max-w-3xl px-6 py-10 text-center">
-          <Badge className="mb-3 rounded-full px-4 py-1">Book a Session</Badge>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Book your football coaching session
-          </h1>
-          <p className="mt-3 text-lg text-slate-600">
-            Choose a session type, pick your time, and we&apos;ll take care of the rest.
-          </p>
+    <div className="min-h-screen bg-gradient-to-b from-emerald-950 via-emerald-950 to-slate-950">
+      {/* Hero header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-800/30 via-transparent to-transparent" />
+        <div className="relative mx-auto max-w-3xl px-6 pt-12 pb-8 text-center">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-6"
+          >
+            <div className="inline-flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
+                <Shield className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold text-white tracking-tight">
+                Play It Love It
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
+            <Badge className="mb-4 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 px-4 py-1.5 text-sm">
+              Limited Spots Available
+            </Badge>
+            <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+              Book Your Football<br />Coaching Session
+            </h1>
+            <p className="mt-4 text-lg text-emerald-200/80 max-w-xl mx-auto">
+              Professional coaching for players aged 6-16. Choose your session, pick a time, and we&apos;ll see you on the pitch.
+            </p>
+          </motion.div>
+
+          {/* Trust badges */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-emerald-300/70"
+          >
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> FA Qualified Coaches
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Free Trial Available
+            </span>
+            <span className="flex items-center gap-1.5">
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> No Commitment
+            </span>
+          </motion.div>
         </div>
       </div>
 
       {/* Progress steps */}
-      <div className="border-b bg-white">
+      <div className="border-y border-white/5 bg-white/5 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-center gap-8 px-6 py-4">
           {[
             { n: 1, label: "Choose Session" },
@@ -191,24 +250,18 @@ export default function BookingPage() {
               className="flex items-center gap-2 text-sm"
             >
               <div
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-all ${
                   step >= n
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-200 text-slate-500"
+                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+                    : "bg-white/10 text-white/40"
                 }`}
               >
-                {step > n ? (
-                  <CheckCircle2 className="h-4 w-4" />
-                ) : (
-                  n
-                )}
+                {step > n ? <CheckCircle2 className="h-4 w-4" /> : n}
               </div>
               <span
-                className={
-                  step >= n
-                    ? "font-medium text-slate-900"
-                    : "text-slate-400"
-                }
+                className={`hidden sm:inline ${
+                  step >= n ? "font-medium text-white" : "text-white/40"
+                }`}
               >
                 {label}
               </span>
@@ -225,42 +278,54 @@ export default function BookingPage() {
             animate={{ opacity: 1, y: 0 }}
             className="grid gap-4 sm:grid-cols-2"
           >
-            {SESSION_TYPES.map((s) => (
-              <Card
-                key={s.id}
-                className={`cursor-pointer rounded-2xl transition-all hover:shadow-md ${
-                  selectedSession === s.id
-                    ? "ring-2 ring-slate-900"
-                    : "hover:ring-1 hover:ring-slate-300"
-                }`}
-                onClick={() => setSelectedSession(s.id)}
-              >
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-base">{s.title}</CardTitle>
-                    {s.badge && (
-                      <Badge variant="secondary" className="rounded-full text-xs">
-                        {s.badge}
-                      </Badge>
-                    )}
-                  </div>
-                  <CardDescription>{s.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-4 text-sm text-slate-600">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" /> {s.duration}
-                    </span>
-                    <span className="font-semibold text-slate-900">
-                      {s.price}
-                    </span>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+            {SESSION_TYPES.map((s) => {
+              const Icon = s.icon;
+              return (
+                <Card
+                  key={s.id}
+                  className={`cursor-pointer rounded-2xl border-white/10 bg-white/5 backdrop-blur-sm transition-all hover:bg-white/10 ${
+                    selectedSession === s.id
+                      ? "ring-2 ring-emerald-400 bg-emerald-500/10"
+                      : "hover:ring-1 hover:ring-white/20"
+                  }`}
+                  onClick={() => setSelectedSession(s.id)}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                          selectedSession === s.id ? "bg-emerald-500/20" : "bg-white/10"
+                        }`}>
+                          <Icon className={`h-4 w-4 ${
+                            selectedSession === s.id ? "text-emerald-400" : "text-white/60"
+                          }`} />
+                        </div>
+                        <CardTitle className="text-base text-white">{s.title}</CardTitle>
+                      </div>
+                      {s.badge && (
+                        <Badge className="rounded-full text-xs bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                          {s.badge}
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription className="text-white/50 ml-[42px]">{s.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-4 text-sm text-white/50 ml-[42px]">
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" /> {s.duration}
+                      </span>
+                      <span className="font-semibold text-emerald-400">
+                        {s.price}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
             <div className="sm:col-span-2 flex justify-end mt-2">
               <Button
-                className="rounded-2xl px-8"
+                className="rounded-2xl px-8 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold shadow-lg shadow-emerald-500/20"
                 disabled={!selectedSession}
                 onClick={() => setStep(2)}
               >
@@ -276,58 +341,62 @@ export default function BookingPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="rounded-2xl">
+            <Card className="rounded-2xl border-white/10 bg-white/5 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>Your Details</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Your Details</CardTitle>
+                <CardDescription className="text-white/50">
                   Tell us about yourself and your player.
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <Label>Your name *</Label>
+                    <Label className="text-white/70">Your name *</Label>
                     <Input
                       value={form.parentName}
                       onChange={(e) => update("parentName", e.target.value)}
                       placeholder="Your full name"
+                      className="bg-white/10 border-white/10 text-white placeholder:text-white/30 focus:border-emerald-400 focus:ring-emerald-400/20"
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Email *</Label>
+                    <Label className="text-white/70">Email *</Label>
                     <Input
                       type="email"
                       value={form.parentEmail}
                       onChange={(e) => update("parentEmail", e.target.value)}
                       placeholder="your@email.com"
+                      className="bg-white/10 border-white/10 text-white placeholder:text-white/30 focus:border-emerald-400 focus:ring-emerald-400/20"
                     />
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Phone number</Label>
+                  <Label className="text-white/70">Phone number</Label>
                   <Input
                     type="tel"
                     value={form.parentPhone}
                     onChange={(e) => update("parentPhone", e.target.value)}
                     placeholder="07xxx xxx xxx"
+                    className="bg-white/10 border-white/10 text-white placeholder:text-white/30 focus:border-emerald-400 focus:ring-emerald-400/20"
                   />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="grid gap-2">
-                    <Label>Player name *</Label>
+                    <Label className="text-white/70">Player name *</Label>
                     <Input
                       value={form.playerName}
                       onChange={(e) => update("playerName", e.target.value)}
                       placeholder="Player's first name"
+                      className="bg-white/10 border-white/10 text-white placeholder:text-white/30 focus:border-emerald-400 focus:ring-emerald-400/20"
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>Player age group</Label>
+                    <Label className="text-white/70">Player age group</Label>
                     <Select
                       value={form.playerAge}
                       onValueChange={(v) => update("playerAge", v)}
                     >
-                      <SelectTrigger>
+                      <SelectTrigger className="bg-white/10 border-white/10 text-white">
                         <SelectValue placeholder="Select age group" />
                       </SelectTrigger>
                       <SelectContent>
@@ -340,24 +409,25 @@ export default function BookingPage() {
                   </div>
                 </div>
                 <div className="grid gap-2">
-                  <Label>Anything we should know?</Label>
+                  <Label className="text-white/70">Anything we should know?</Label>
                   <Textarea
                     value={form.notes}
                     onChange={(e) => update("notes", e.target.value)}
                     placeholder="Position preference, injuries, experience level..."
                     rows={3}
+                    className="bg-white/10 border-white/10 text-white placeholder:text-white/30 focus:border-emerald-400 focus:ring-emerald-400/20"
                   />
                 </div>
                 <div className="flex justify-between mt-2">
                   <Button
                     variant="outline"
-                    className="rounded-2xl"
+                    className="rounded-2xl border-white/20 text-white hover:bg-white/10"
                     onClick={() => setStep(1)}
                   >
                     Back
                   </Button>
                   <Button
-                    className="rounded-2xl px-8"
+                    className="rounded-2xl px-8 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold shadow-lg shadow-emerald-500/20"
                     disabled={
                       !form.parentName || !form.parentEmail || !form.playerName
                     }
@@ -377,25 +447,26 @@ export default function BookingPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <Card className="rounded-2xl">
+            <Card className="rounded-2xl border-white/10 bg-white/5 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle>Pick a Time</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-white">Pick a Time</CardTitle>
+                <CardDescription className="text-white/50">
                   Choose your preferred date and time slot.
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label>Preferred date *</Label>
+                  <Label className="text-white/70">Preferred date *</Label>
                   <Input
                     type="date"
                     value={form.preferredDate}
                     onChange={(e) => update("preferredDate", e.target.value)}
                     min={new Date().toISOString().split("T")[0]}
+                    className="bg-white/10 border-white/10 text-white focus:border-emerald-400 focus:ring-emerald-400/20"
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label>Preferred time *</Label>
+                  <Label className="text-white/70">Preferred time *</Label>
                   <div className="grid grid-cols-4 gap-2">
                     {TIME_SLOTS.map((t) => (
                       <button
@@ -403,8 +474,8 @@ export default function BookingPage() {
                         onClick={() => update("preferredTime", t)}
                         className={`rounded-xl border px-3 py-2.5 text-sm font-medium transition-all ${
                           form.preferredTime === t
-                            ? "border-slate-900 bg-slate-900 text-white"
-                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-400"
+                            ? "border-emerald-400 bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
+                            : "border-white/10 bg-white/5 text-white/70 hover:border-white/30 hover:bg-white/10"
                         }`}
                       >
                         {t}
@@ -414,39 +485,39 @@ export default function BookingPage() {
                 </div>
 
                 {error && (
-                  <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
+                  <div className="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-300">
                     {error}
                   </div>
                 )}
 
                 {/* Summary */}
-                <div className="rounded-2xl bg-slate-50 p-5 mt-2">
-                  <p className="text-sm font-medium text-slate-500 mb-3">
+                <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-5 mt-2">
+                  <p className="text-sm font-medium text-emerald-300 mb-3">
                     Booking Summary
                   </p>
                   <div className="grid gap-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Star className="h-4 w-4 text-slate-400" />
+                    <div className="flex items-center gap-2 text-white/70">
+                      <Star className="h-4 w-4 text-emerald-400" />
                       <span>
                         {SESSION_TYPES.find((s) => s.id === selectedSession)
-                          ?.title ?? "—"}
+                          ?.title ?? "\u2014"}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-slate-400" />
-                      <span>{form.playerName || "—"}</span>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <Users className="h-4 w-4 text-emerald-400" />
+                      <span>{form.playerName || "\u2014"}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <CalendarDays className="h-4 w-4 text-slate-400" />
-                      <span>{form.preferredDate || "—"}</span>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <CalendarDays className="h-4 w-4 text-emerald-400" />
+                      <span>{form.preferredDate || "\u2014"}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-slate-400" />
-                      <span>{form.preferredTime || "—"}</span>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <Clock className="h-4 w-4 text-emerald-400" />
+                      <span>{form.preferredTime || "\u2014"}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-slate-400" />
-                      <span>Location TBC after confirmation</span>
+                    <div className="flex items-center gap-2 text-white/70">
+                      <MapPin className="h-4 w-4 text-emerald-400" />
+                      <span>Location confirmed after booking</span>
                     </div>
                   </div>
                 </div>
@@ -454,13 +525,13 @@ export default function BookingPage() {
                 <div className="flex justify-between mt-2">
                   <Button
                     variant="outline"
-                    className="rounded-2xl"
+                    className="rounded-2xl border-white/20 text-white hover:bg-white/10"
                     onClick={() => setStep(2)}
                   >
                     Back
                   </Button>
                   <Button
-                    className="rounded-2xl px-8"
+                    className="rounded-2xl px-8 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold shadow-lg shadow-emerald-500/20"
                     disabled={
                       !form.preferredDate || !form.preferredTime || submitting
                     }
@@ -474,6 +545,15 @@ export default function BookingPage() {
           </motion.div>
         )}
       </main>
+
+      {/* Footer */}
+      <div className="border-t border-white/5 mt-8">
+        <div className="mx-auto max-w-3xl px-6 py-8 text-center">
+          <p className="text-sm text-white/30">
+            Play It Love It &middot; Professional Football Coaching
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
