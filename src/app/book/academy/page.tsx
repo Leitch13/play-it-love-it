@@ -42,8 +42,8 @@ const SESSION_TYPES = [
     description: "Building strong foundations \u2014 technique, game awareness and confidence",
     icon: Star,
     sessions: [
-      { day: "Friday", time: "5:50pm \u2013 6:50pm", location: "5's Aberdeen" },
-      { day: "Saturday", time: "12:00pm \u2013 1:00pm", location: "5's Aberdeen" },
+      { day: "Friday", time: "5:50pm \u2013 6:50pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1852" },
+      { day: "Saturday", time: "12:00pm \u2013 1:00pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1854" },
     ],
   },
   {
@@ -53,7 +53,7 @@ const SESSION_TYPES = [
     description: "Developing tactical understanding and individual skill",
     icon: Target,
     sessions: [
-      { day: "Friday", time: "6:50pm \u2013 7:50pm", location: "5's Aberdeen" },
+      { day: "Friday", time: "6:50pm \u2013 7:50pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1853" },
     ],
   },
   {
@@ -63,7 +63,7 @@ const SESSION_TYPES = [
     description: "Intensive development for players ready to step up",
     icon: Zap,
     sessions: [
-      { day: "Friday", time: "5:50pm \u2013 6:50pm", location: "5's Aberdeen" },
+      { day: "Friday", time: "5:50pm \u2013 6:50pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1846" },
     ],
   },
   {
@@ -73,10 +73,10 @@ const SESSION_TYPES = [
     description: "High-intensity sessions focused on elite skill development",
     icon: Zap,
     sessions: [
-      { day: "Monday", time: "7:00pm \u2013 8:00pm", location: "5's Aberdeen" },
-      { day: "Tuesday", time: "6:00pm \u2013 7:00pm", location: "5's Aberdeen" },
-      { day: "Thursday", time: "5:00pm \u2013 6:00pm", location: "5's Aberdeen" },
-      { day: "Friday", time: "6:50pm \u2013 7:50pm", location: "5's Aberdeen" },
+      { day: "Monday", time: "7:00pm \u2013 8:00pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1844" },
+      { day: "Tuesday", time: "6:00pm \u2013 7:00pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1857" },
+      { day: "Thursday", time: "5:00pm \u2013 6:00pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1858" },
+      { day: "Friday", time: "6:50pm \u2013 7:50pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1847" },
     ],
   },
   {
@@ -86,7 +86,7 @@ const SESSION_TYPES = [
     description: "Girls-focused sessions \u2014 same intensity, dedicated environment",
     icon: Zap,
     sessions: [
-      { day: "Thursday", time: "7:00pm \u2013 8:00pm", location: "5's Aberdeen" },
+      { day: "Thursday", time: "7:00pm \u2013 8:00pm", location: "5's Aberdeen", bookingUrl: "https://playitloveit.classforkids.io/info/1845" },
     ],
   },
 ];
@@ -120,32 +120,33 @@ export default function AcademyBookingPage() {
     const slot = selectedType?.sessions[parseInt(selectedSlot)];
 
     try {
-      const res = await fetch("/api/bookings", {
+      // Capture lead in our system (triggers automated emails)
+      await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          parentName: form.parentName,
-          parentEmail: form.parentEmail,
-          parentPhone: form.parentPhone,
-          playerName: form.playerName,
-          playerAge: form.playerAge || selectedType?.ageRange,
-          sessionType: `academy_${selectedSession}`,
-          preferredDate: slot?.day ?? "",
-          preferredTime: slot?.time ?? "",
-          notes: `${slot?.location ?? ""} | ${form.notes}`,
+          firstName: form.parentName,
+          email: form.parentEmail,
+          phone: form.parentPhone,
+          childName: form.playerName,
+          ageGroup: form.playerAge || selectedType?.ageRange,
+          source: "booking_page",
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "Booking failed");
+      // Redirect to ClassForKids to complete the actual booking
+      if (slot?.bookingUrl) {
+        window.location.href = slot.bookingUrl;
+      } else {
+        window.location.href = "https://playitloveit.classforkids.io/term/249";
       }
-
-      setSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
-      setSubmitting(false);
+    } catch {
+      // Even if lead capture fails, still send them to ClassForKids
+      if (slot?.bookingUrl) {
+        window.location.href = slot.bookingUrl;
+      } else {
+        window.location.href = "https://playitloveit.classforkids.io/term/249";
+      }
     }
   };
 

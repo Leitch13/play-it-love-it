@@ -43,9 +43,9 @@ const SESSION_TYPES = [
     description: "First steps into football \u2014 fun, movement and coordination",
     icon: Heart,
     sessions: [
-      { day: "Tuesday", time: "11:30am \u2013 12:30pm", location: "Ellon Meadows Sports Centre" },
-      { day: "Saturday", time: "9:00am \u2013 10:00am", location: "Braehead School" },
-      { day: "Friday", time: "11:15am \u2013 12:15pm", location: "Westdyke Leisure Centre" },
+      { day: "Tuesday", time: "11:30am \u2013 12:30pm", location: "Ellon Meadows Sports Centre", bookingUrl: "https://playitloveit.classforkids.io/info/1808" },
+      { day: "Saturday", time: "9:00am \u2013 10:00am", location: "Braehead School", bookingUrl: "https://playitloveit.classforkids.io/info/1806" },
+      { day: "Friday", time: "11:15am \u2013 12:15pm", location: "Westdyke Leisure Centre", bookingUrl: "https://playitloveit.classforkids.io/info/1893" },
     ],
   },
   {
@@ -56,9 +56,9 @@ const SESSION_TYPES = [
     description: "Building confidence, balance and basic ball skills",
     icon: Star,
     sessions: [
-      { day: "Saturday", time: "10:00am \u2013 11:00am", location: "Braehead School" },
-      { day: "Friday", time: "12:15pm \u2013 1:15pm", location: "Westdyke Leisure Centre" },
-      { day: "Friday", time: "1:15pm \u2013 2:15pm", location: "Westdyke Leisure Centre" },
+      { day: "Saturday", time: "10:00am \u2013 11:00am", location: "Braehead School", bookingUrl: "https://playitloveit.classforkids.io/info/1805" },
+      { day: "Friday", time: "12:15pm \u2013 1:15pm", location: "Westdyke Leisure Centre", bookingUrl: "https://playitloveit.classforkids.io/info/1894" },
+      { day: "Friday", time: "1:15pm \u2013 2:15pm", location: "Westdyke Leisure Centre", bookingUrl: "https://playitloveit.classforkids.io/info/1895" },
     ],
   },
   {
@@ -69,7 +69,7 @@ const SESSION_TYPES = [
     description: "Developing skills, teamwork and a love for the game",
     icon: Smile,
     sessions: [
-      { day: "Saturday", time: "11:00am \u2013 12:00pm", location: "Braehead School" },
+      { day: "Saturday", time: "11:00am \u2013 12:00pm", location: "Braehead School", bookingUrl: "https://playitloveit.classforkids.io/info/1807" },
     ],
   },
 ];
@@ -103,32 +103,33 @@ export default function SoccerTotsBookingPage() {
     const slot = selectedType?.sessions[parseInt(selectedSlot)];
 
     try {
-      const res = await fetch("/api/bookings", {
+      // Capture lead in our system (triggers automated emails)
+      await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          parentName: form.parentName,
-          parentEmail: form.parentEmail,
-          parentPhone: form.parentPhone,
-          playerName: form.playerName,
-          playerAge: form.playerAge || selectedType?.ageRange,
-          sessionType: `soccer_tots_${selectedSession}`,
-          preferredDate: slot?.day ?? "",
-          preferredTime: slot?.time ?? "",
-          notes: `${slot?.location ?? ""} | ${form.notes}`,
+          firstName: form.parentName,
+          email: form.parentEmail,
+          phone: form.parentPhone,
+          childName: form.playerName,
+          ageGroup: form.playerAge || selectedType?.ageRange,
+          source: "booking_page",
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error ?? "Booking failed");
+      // Redirect to ClassForKids to complete the actual booking
+      if (slot?.bookingUrl) {
+        window.location.href = slot.bookingUrl;
+      } else {
+        window.location.href = "https://playitloveit.classforkids.io/term/234";
       }
-
-      setSubmitted(true);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
-    } finally {
-      setSubmitting(false);
+    } catch {
+      // Even if lead capture fails, still send them to ClassForKids
+      if (slot?.bookingUrl) {
+        window.location.href = slot.bookingUrl;
+      } else {
+        window.location.href = "https://playitloveit.classforkids.io/term/234";
+      }
     }
   };
 
