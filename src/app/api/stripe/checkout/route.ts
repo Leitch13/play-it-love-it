@@ -13,6 +13,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorised" }, { status: 401 });
     }
 
+    if (!stripe) {
+      return NextResponse.json({ error: "Payments not configured" }, { status: 500 });
+    }
+
     const body = await request.json().catch(() => ({}));
     const priceId: string = body.priceId ?? STRIPE_PRICE_HUB_MONTHLY;
 
