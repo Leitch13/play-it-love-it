@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   CalendarDays,
   Clock,
@@ -186,7 +187,25 @@ export default function AcademyBookingPage() {
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-800/30 via-transparent to-transparent" />
-        <div className="relative mx-auto max-w-3xl px-6 pt-12 pb-8 text-center">
+        {/* Hero image */}
+        <div className="relative mx-auto max-w-3xl px-6 pt-10 pb-0">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="mx-auto mb-8 max-w-sm overflow-hidden rounded-3xl ring-2 ring-emerald-400/30 shadow-2xl shadow-emerald-900/50"
+          >
+            <Image
+              src="/hero-academy.jpg"
+              alt="Play It Love It Academy player on the pitch"
+              width={600}
+              height={800}
+              className="w-full h-auto object-cover"
+              priority
+            />
+          </motion.div>
+        </div>
+        <div className="relative mx-auto max-w-3xl px-6 pt-0 pb-8 text-center">
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <div className="inline-flex items-center gap-2.5">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
