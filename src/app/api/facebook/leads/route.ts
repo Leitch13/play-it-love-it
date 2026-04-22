@@ -94,15 +94,53 @@ function extractFromFacebookWebhook(body: {
 
 /** Extract from pre-mapped Make.com/Zapier payload */
 function extractFromMappedPayload(body: Record<string, unknown>): LeadPayload {
-  return {
-    firstName: (body.firstName as string) ?? (body.first_name as string) ?? "Facebook Lead",
-    email: (body.email as string) ?? "",
-    phone: (body.phone as string) ?? (body.phone_number as string) ?? undefined,
-    childName: (body.childName as string) ?? undefined,
-    ageGroup: (body.ageGroup as string) ?? undefined,
-    utmCampaign: (body.utmCampaign as string) ?? undefined,
-    utmSource: (body.utmSource as string) ?? "facebook",
+  // Deep search — Make.com sometimes nests Facebook data, so hunt for common field names
+  const flat = flattenObject(body);
+
+  const findField = (keys: string[]): string | undefined => {
+    for (const key of keys) {
+      for (const [k, v] of Object.entries(flat)) {
+        if (k.toLowerCase().includes(key.toLowerCase()) && typeof v === "string" && v.trim()) {
+          return v.trim();
+        }
+      }
+    }
+    return undefined;
   };
+
+  const email = findField(["email"]) ?? "";
+  const firstName =
+    findField(["firstName", "first_name"]) ??
+    findField(["full_name", "fullname", "name"])?.split(" ")[0] ??
+    "Facebook Lead";
+  const phone = findField(["phone_number", "phone"]);
+  const childName = findField(["childName", "child_name", "player_name"]);
+  const ageGroup = findField(["ageGroup", "age_group", "age"]);
+  const utmCampaign = findField(["utmCampaign", "utm_campaign", "campaign"]);
+  const utmSource = findField(["utmSource", "utm_source"]) ?? "facebook";
+
+  return { firstName, email, phone, childName, ageGroup, utmCampaign, utmSource };
+}
+
+/** Flatten nested object so we can search all field names and values */
+function flattenObject(
+  obj: unknown,
+  prefix = "",
+  result: Record<string, unknown> = {}
+): Record<string, unknown> {
+  if (obj === null || typeof obj !== "object") return result;
+
+  for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+    const newKey = prefix ? `${prefix}.${key}` : key;
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      flattenObject(value, newKey, result);
+    } else if (Array.isArray(value)) {
+      value.forEach((item, i) => flattenObject(item, `${newKey}[${i}]`, result));
+    } else {
+      result[newKey] = value;
+    }
+  }
+  return result;
 }
 
 /** Save lead directly to DB and trigger welcome email + coach notification */
