@@ -218,34 +218,70 @@ export default function AcademyBookingPage() {
 
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
             <Badge className="mb-4 rounded-full bg-emerald-500/20 text-emerald-300 border-emerald-500/30 px-4 py-1.5 text-sm">
-              Free Trial Available
+              £2.50 Trial Session
             </Badge>
             <h1 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
               Academy &amp; Accelerator
             </h1>
             <p className="mt-2 text-xl text-emerald-200 font-medium">
-              Structured coaching for players aged 7\u201313
+              Structured coaching for players aged 7&ndash;13
             </p>
             <p className="mt-3 text-emerald-200/70 max-w-xl mx-auto">
               Take your game to the next level with professional coaching at 5&apos;s Aberdeen. Technique, tactics, and game intelligence.
             </p>
+
+            {/* Primary CTA above the fold */}
+            <div className="mt-6">
+              <a
+                href="#book"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById("book")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 hover:bg-emerald-400 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
+              >
+                Book Your Trial &mdash; £2.50
+                <span aria-hidden>&rarr;</span>
+              </a>
+              <p className="mt-2 text-xs text-emerald-300/60">Regular sessions £49/month &middot; Cancel anytime</p>
+            </div>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-6 flex flex-wrap items-center justify-center gap-6 text-sm text-emerald-300/70"
+            className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-emerald-300/70"
           >
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-4 w-4 text-emerald-400" /> FA Qualified Coaches
             </span>
             <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> Free Trial Session
+              <CheckCircle2 className="h-4 w-4 text-emerald-400" /> £2.50 Trial
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="h-4 w-4 text-emerald-400" /> No Commitment
             </span>
+          </motion.div>
+
+          {/* Social proof */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="mt-8 max-w-xl mx-auto rounded-2xl bg-white/5 border border-white/10 p-5 text-left backdrop-blur-sm"
+          >
+            <div className="flex items-center gap-1 mb-2 justify-center">
+              {[1,2,3,4,5].map((i) => (
+                <svg key={i} className="h-4 w-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+              ))}
+            </div>
+            <p className="text-sm text-white/80 italic text-center">
+              &ldquo;My son&apos;s confidence on the pitch has completely transformed since joining. The coaches genuinely care about each player&apos;s development.&rdquo;
+            </p>
+            <p className="mt-2 text-xs text-emerald-300/60 text-center">&mdash; Sarah, parent of Mason (U11)</p>
           </motion.div>
         </div>
       </div>
@@ -278,7 +314,7 @@ export default function AcademyBookingPage() {
         </div>
       </div>
 
-      <main className="mx-auto max-w-3xl px-6 py-10">
+      <main id="book" className="mx-auto max-w-3xl px-6 py-10 scroll-mt-10">
         {/* Step 1 */}
         {step === 1 && (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="grid gap-4">
@@ -459,7 +495,7 @@ export default function AcademyBookingPage() {
                     disabled={!selectedSlot || submitting}
                     onClick={handleSubmit}
                   >
-                    {submitting ? "Booking..." : "Book Free Trial"}
+                    {submitting ? "Booking..." : "Book £2.50 Trial"}
                   </Button>
                 </div>
               </CardContent>
